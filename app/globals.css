@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.formInput{
+    @apply outline-none rounded-md px-2 text-lg border-2 h-10 w-full placeholder-transparent relative transition-colors
+   ;
+}
+.formInputLabel{
+    @apply absolute px-1 left-1 opacity-50 cursor-text   peer-placeholder-shown:text-base
+      peer-placeholder-shown:top-2  peer-focus:text-gray-400 peer-focus:opacity-100
+       peer-focus:translate-x-1 peer-focus:-translate-y-5 peer-focus:border-gray-400 
+        bg-white transition-all duration-300;
+}
+.formInputLabel_stay{
+    @apply -translate-y-5 translate-x-1 text-gray-400  border-gray-400 opacity-100 ;
+}
+.profile_list_item{
+    @apply px-2 py-1 rounded-md cursor-pointer items-center flex gap-1  z-10
+    hover:bg-primary dark:hover:bg-primary_dark
+    hover:bg-opacity-10 dark:hover:bg-opacity-10
+      text-primary
+     dark:text-primary_dark
+     last:rounded-none last:rounded-b-md;
+
+}

@@ -1,5 +1,6 @@
 import Header from '@/src/components/Header/Header'
 import './globals.css'
+import {Analytics } from '@vercel/analytics/react'
 
 export const metadata = {
   title: 'HoopCast - Home',
@@ -19,6 +20,7 @@ export default function RootLayout({
 
         <main className='mt-12 min-h-[calc(100dvh-48px)] bg-primary dark:bg-primary_dark dark:text-white transition-colors'>
         {children}
+        <Analytics/>
         </main>
         <div id='cover'></div>
       </body>

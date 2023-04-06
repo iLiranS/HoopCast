@@ -30,7 +30,7 @@ const MatchPage:React.FC<{game:gamesData;predictionsData:predictionsData}> = ({g
         return;
       }
       try{
-        const response = await fetch('https://hoop-cast.vercel.app/api/addprediction', {
+        const response = await fetch('/api/addprediction', {
           method: 'POST',
           body: JSON.stringify({ matchId, userId: currentUser.uid, team:side }),
           headers: {

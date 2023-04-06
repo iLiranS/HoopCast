@@ -1,5 +1,5 @@
 import { db } from '../../../src/firebase/base'
-import { collection , doc , setDoc , getDoc, updateDoc , arrayUnion, getDocs } from 'firebase/firestore';
+import { collection , doc , setDoc , getDoc, updateDoc } from 'firebase/firestore';
 import { NextResponse } from 'next/server';
 
 

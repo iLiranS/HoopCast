@@ -26,7 +26,7 @@ const MatchComments:React.FC<{comments:comment[],matchId:string}> = ({comments,m
       // need  matchId, userId,userAvatar,userName, comment
       try{
         setIsCommmentResultLoading(true);
-        const response = await fetch('https://hoop-cast.vercel.app/api/addcomment', {
+        const response = await fetch('/api/addComment', {
           method: 'POST',
           body: JSON.stringify({ matchId:matchId, userId: user.uid,userAvatar:user.photoURL,userName:user.displayName,comment:commentInput.value}),
           headers: {

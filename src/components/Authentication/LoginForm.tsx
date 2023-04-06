@@ -96,7 +96,7 @@ const signUpEmailHandler = async()=>{
 
 
   try{
-    const response = await fetch('https://hoop-cast.vercel.app/api/adduser',{
+    const response = await fetch('/api/addUser',{
       method:'POST',
       body:JSON.stringify({email:emailInput.value,password:passwordInput.value,username:userNameInput.value,photoURL:avatar}),
       headers:{'Content-Type':'application/json'}

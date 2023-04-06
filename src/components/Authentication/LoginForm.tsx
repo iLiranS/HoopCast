@@ -1,3 +1,4 @@
+'use client'
 import useInput from '@/src/hooks/useInput'
 import React, { useCallback, useState } from 'react'
 import Portal from '../Ui/Portal'
@@ -188,10 +189,10 @@ const rememberToggleHandler = () => setRemember(prev=>!prev);
   return (
     <Portal onClose={onClose}>
         <form onSubmit={submitHandler} className='h-screen overflow-hidden max-h-[500px] w-[90%] max-w-[400px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md
-        text-primary_dark bg-white p-2 px-8 flex flex-col items-center gap-8'>
+        text-primary_dark bg-primary dark:bg-primary_dark bg-opacity-40 backdrop-blur-md p-2 px-8 flex flex-col items-center gap-2'>
 
 
-          <ul className={`flex relative justify-between  bg-primary bg-opacity-50 border-primary border-2 rounded-md text-primary
+          <ul className={`flex relative justify-between  bg-primary bg-opacity-50 border-primary border-opacity-40 border-2 rounded-md text-primary
            after:w-1/2 after:bg-primary_btns after:absolute after:h-full after:rounded-md ${isLogin ? 'after:translate-x-0' : 'after:translate-x-full'} after:transition-transform `}>
             <li onClick={()=>{setIsLogin(true)}} className={`${isLogin ? 'text-white' : 'text-primary_dark '} cursor-pointer w-max px-4 py-2  z-10`}>Login</li>
             <li onClick={()=>{setIsLogin(false)}} className={`${isLogin ? 'text-primary_dark ' : 'text-white'} cursor-pointer w-max px-4 py-2 z-10`}>Sign Up</li>
@@ -207,21 +208,21 @@ const rememberToggleHandler = () => setRemember(prev=>!prev);
         {!isLogin &&  <SignUpAvatar updateAvatar={updateAvatarHandler}/>}
 
         {!isLogin && 
-        <section className={`flex relative items-center border-2 rounded-md pr-2  ${userNameInput.hasError ? 'border-red-400 ' : ' border-gray-400'}`}>
+        <section className={`flex relative bg-opacity-40 bg-white items-center border-2 rounded-md pr-2  ${userNameInput.hasError ? 'border-red-400 ' : ' border-transparent'}`}>
           <input id='username' placeholder=''  className={`formInput peer border-none `} type='text' value={userNameInput.value} onChange={updateUserNameInput}/>
           <label htmlFor="username" className={`formInputLabel ${userNameInput.value.length>0 && 'formInputLabel_stay'}`}>Username</label>
         </section>
       }
 
-        <section className='flex relative items-center'>
-        <input  id='email'  placeholder=''  className={`formInput peer ${emailInput.hasError ? 'border-red-400' : ' border-gray-400'}`} type='email' value={emailInput.value} onChange={updateEmailInput}/>
+        <section className='flex relative bg-opacity-40 rounded-md bg-white items-center'>
+        <input  id='email'  placeholder=''  className={`formInput peer ${emailInput.hasError ? 'border-red-400' : ' border-transparent'}`} type='email' value={emailInput.value} onChange={updateEmailInput}/>
         <label htmlFor="email" className={`formInputLabel ${emailInput.value.length>0 && 'formInputLabel_stay'}`}>Email</label>
         </section>
 
-        <section className={`flex relative items-center border-2 rounded-md pr-2  ${passwordInput.hasError ? 'border-red-400 ' : ' border-gray-400'}`}>
+        <section className={`flex relative bg-opacity-40 bg-white items-center border-2 rounded-md pr-2  ${passwordInput.hasError ? 'border-red-400 ' : ' border-transparent'}`}>
           <input id='password' placeholder=''  className={`formInput peer border-none `} type={isPasswordShown ? 'text' : 'password'} value={passwordInput.value} onChange={updatePasswordInput}/>
           <label htmlFor="password" className={`formInputLabel ${passwordInput.value.length>0 && 'formInputLabel_stay'}`}>Password</label>
-          <div onClick={togglePassowrdShown} className='flex items-center opacity-70'>
+          <div onClick={togglePassowrdShown} className='flex items-center opacity-70 cursor-pointer'>
           {isPasswordShown ? <AiFillEyeInvisible/> : <AiFillEye/>}
          </div>
         </section>
@@ -229,10 +230,10 @@ const rememberToggleHandler = () => setRemember(prev=>!prev);
       
 
       {!isLogin && 
-        <section className={`flex relative items-center border-2 rounded-md pr-2  ${confirmPasswordInput.hasError ? 'border-red-400 ' : ' border-gray-400'}`}>
+        <section className={`flex relative bg-opacity-40 bg-white items-center border-2 rounded-md pr-2  ${confirmPasswordInput.hasError ? 'border-red-400 ' : ' border-transparent'}`}>
           <input id='confirmPassword' placeholder=''  className={`formInput peer border-none `} type={isPasswordShown ? 'text' : 'password'} value={confirmPasswordInput.value} onChange={updateConfirmPasswordInput}/>
           <label htmlFor="confirmPassword" className={`formInputLabel ${confirmPasswordInput.value.length>0 && 'formInputLabel_stay'}`}>Confirm Password</label>
-          <div onClick={togglePassowrdShown} className='flex items-center opacity-70'>
+          <div onClick={togglePassowrdShown} className='flex items-center opacity-70 cursor-pointer'>
           {isPasswordShown ? <AiFillEyeInvisible/> : <AiFillEye/>}
          </div>
         </section>
@@ -243,10 +244,11 @@ const rememberToggleHandler = () => setRemember(prev=>!prev);
       {isLogin && <LoginAddons remember={remember} toggleRemember={rememberToggleHandler} passwordResetHandler={passwordResetHandler}/>}
 
         <button className='py-2 px-4
-         bg-primary_btns text-primary rounded-md hover:bg-opacity-90'>
+         bg-primary_btns rounded-md text-white'>
           {isLogin ? 'Login' : 'Sign Up'}
         </button>
-        {error ? <p className='text-red-400 text-sm self-center'>{error}</p> : ''} 
+        {error && error!=='successfully registered' && <p className='text-red-600 font-semibold  text-sm self-center'>{error}</p>} 
+        {error && error==='successfully registered' && <p className='text-green-500 font-semibold  text-sm self-center'>{error}</p>}
         {isLoading ? <div className='w-full flex justify-center'><Spinner/> </div>  : ''}
         </div>
 
@@ -258,7 +260,7 @@ const rememberToggleHandler = () => setRemember(prev=>!prev);
        </section>
 
       
-       <AiFillCloseCircle onClick={onClose} className='absolute right-2 top-2 text-2xl cursor-pointer'/>
+       <AiFillCloseCircle onClick={onClose} className='absolute right-2 top-2 text-2xl cursor-pointer dark:text-white'/>
         </form>
     </Portal>
   )

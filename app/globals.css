@@ -4,17 +4,18 @@
 
 
 .formInput{
-    @apply outline-none rounded-md px-2 text-lg border-2 h-10 w-full placeholder-transparent relative transition-colors
+    @apply outline-none bg-transparent rounded-md px-2 text-lg border-2 h-10 w-full placeholder-transparent relative transition-colors
+    dark:text-white
    ;
 }
 .formInputLabel{
-    @apply absolute px-1 left-1 opacity-50 cursor-text   peer-placeholder-shown:text-base
-      peer-placeholder-shown:top-2  peer-focus:text-gray-400 peer-focus:opacity-100
+    @apply absolute px-1 left-1 rounded-md opacity-50 cursor-text text-sm   peer-placeholder-shown:text-base
+      peer-placeholder-shown:top-2  peer-focus:text-white peer-focus:opacity-100 dark:text-white
        peer-focus:translate-x-1 peer-focus:-translate-y-5 peer-focus:border-gray-400 
-        bg-white transition-all duration-300;
+        bg-transparent text-gray-700 transition-all duration-300 peer-focus:bg-gray-800;
 }
 .formInputLabel_stay{
-    @apply -translate-y-5 translate-x-1 text-gray-400  border-gray-400 opacity-100 ;
+    @apply -translate-y-5 bg-gray-800 bg-opacity-30 text-sm text-white rounded-md border-gray-400  opacity-100 ;
 }
 .profile_list_item{
     @apply px-2 py-1 rounded-md cursor-pointer items-center flex gap-1  z-10

@@ -6,10 +6,7 @@ import { gamesData, vote } from '@/src/Models/gameData';
 
 const inter = Inter({ subsets: ['latin'] })
 
-// remember to switch to api before deployment.
 export const revalidate = 960; // every 16mins  = 90 per day.
-export const dynamic = 'force-static';
-// export const dynamicParams = false
 
 const getUpdatedGame = async()=>{
   const currentDate = new Date();

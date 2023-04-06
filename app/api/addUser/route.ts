@@ -4,6 +4,9 @@ import {auth} from '../../../src/firebase/base'
 import sanitize from 'sanitize-html';
 import validator from 'validator';
 
+
+
+
 export async function POST(request: Request) {
     const res = await request.json();
     const {email,password,photoURL,username} = res;

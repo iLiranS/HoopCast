@@ -3,7 +3,10 @@ import { collection, doc , getDocs , getDoc , QueryDocumentSnapshot} from 'fireb
 import MatchPage from '@/src/components/Match/MatchPage';
 import { gamesData, predictionsData , vote } from '@/src/Models/gameData';
 
-export const dynamicParams = false;
+export const dynamicParams = true;
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
+
 export const metadata = {
     title:'HoopCast - Match',
     description: 'Match page of HoopCast',

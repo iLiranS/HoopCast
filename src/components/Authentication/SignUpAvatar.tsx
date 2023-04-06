@@ -48,12 +48,10 @@ function makeid(length:number) {
 
 
   return (
-    <div className='h-10 w-full relative flex gap-8 items-center'>
-      <p>Avatar </p>
+    <div className='h-10 w-full relative flex gap-4 justify-center items-center'>
 
-      <section className='relative h-10 w-10'>
+      <section className='relative aspect-square h-12 rounded-full border-2 border-black'>
         {avatar && <MatchImage className={'h-full w-full rounded-full'} src={avatar} alt='avatar'/>}
-        {/* {avatar &&<Image onLoad={ImageLoadingHandler} fill className='rounded-full aspect-square' alt='userAvatar' src={avatar}/>} */}
        <AiOutlineReload onClick={generateAvatar} className={`absolute text-lg right-0 top-0 bg-white text-primary_dark rounded-full ${canReload ? 'opacity-100 cursor-pointer' : 'text-opacity-50 cursor-not-allowed'}`}/>
        
       </section>

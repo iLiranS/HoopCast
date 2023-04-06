@@ -1,5 +1,4 @@
 import { convertUTCToLocalTime, gamesData } from '@/src/Models/gameData';
-import Image from 'next/image';
 import React from 'react'
 import MatchImage from '../Match/MatchImage';
 import Link from 'next/link';

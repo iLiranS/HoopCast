@@ -6,11 +6,11 @@ const LoginAddons:React.FC<{passwordResetHandler:()=>void,toggleRemember:()=>voi
           
     <li className='flex gap-1'>
     <input checked={remember} onChange={toggleRemember} className='self-end  cursor-pointer' type="checkbox" id='rememberchbox' />
-    <label className=' cursor-pointer font-semibold select-none'  htmlFor="rememberchbox">Remember me</label>
+    <label className=' cursor-pointer font-semibold select-none text-primary_dark dark:text-primary'  htmlFor="rememberchbox">Remember me</label>
     </li>
 
     <li>
-      <p onClick={passwordResetHandler} className='text-primary_btns cursor-pointer hover:opacity-90 font-semibold'>Forgot password?</p>
+      <p onClick={passwordResetHandler} className=' text-primary_btns cursor-pointer hover:opacity-90 font-semibold'>Forgot password?</p>
     </li>
 
 

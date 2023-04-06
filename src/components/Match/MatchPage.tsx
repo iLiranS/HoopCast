@@ -6,7 +6,6 @@ import MatchSide from './MatchSide';
 import Alert from '../Ui/Alert';
 import MatchComments from './MatchComments';
 import Link from 'next/link';
-import Spinner from '../Spinner/Spinner';
 
 
 
@@ -111,22 +110,13 @@ const MatchPage:React.FC<{game:gamesData;predictionsData:predictionsData}> = ({g
               </div>
               }
              <p className={`text-xs absolute -bottom-4  h-min  w-min self-center ${game.status.long==='In Play'? ' text-rose-500' : 'text-primary dark:text-primary_dark'}`}>{game.status.long==='In Play' ? 'live' : game.status.long}</p>
-             
             </section>
 
             <MatchSide votes={predictionsData? predictionsData.visitors :0} percent={percentages ? percentages.visitors : null} status={game.status.long} didVote={didVote} voteFunction={votePredict} matchId={game.id} side='visitors' team={teams.visitors} wins={scores.visitors.win} losses={scores.visitors.lose}/>
         </section>
-
-             
-              </div>
-
-               
-               <MatchComments isLoading={isMessagesLoading} matchId={id.toString()} comments={comments}/>
-
-              
-
-
-              {showAlert && <Alert message={alertMessage} onClose={closeAlert}/>}
+      </div>
+        <MatchComments isLoading={isMessagesLoading} matchId={id.toString()} comments={comments}/>
+        {showAlert && <Alert message={alertMessage} onClose={closeAlert}/>}
     </div>
   )
 }

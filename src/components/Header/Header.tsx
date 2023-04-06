@@ -6,16 +6,13 @@ import {BsFillSunFill , BsFillMoonFill} from 'react-icons/bs'
 import {AiOutlineUser , AiOutlineLogout} from 'react-icons/ai'
 import useThemeStore from '@/src/store/useThemeStore';
 import useAuthStore from '@/src/store/useAuthStore';
-import Image from 'next/image';
 import MatchImage from '../Match/MatchImage';
-import Spinner from '../Spinner/Spinner';
 
 
 
 
 const Header = () => {
     const [isLoginInFormOpen , setIsLoginFormOpen] = useState(false);
-    const [isImageLoading,setIsImageLoading] = useState(true);
     const [expandProfile,setExpandProfile] = useState(false);
     const currentUser = useAuthStore((state)=> state.currentUser);
     const logout = useAuthStore((state)=>state.logout)
@@ -67,7 +64,6 @@ const Header = () => {
       
         <section onClick={expandProfileHandler} className='flex flex-col relative'>
           <div className='h-full aspect-square relative w-8 cursor-pointer'>
-            {isImageLoading && <div className='h-full w-full rounded-full bg-gray-700 animate-pulse absolute top-0 left-0'></div>}
             <MatchImage src={currentUser.photoURL ?? ''} alt={currentUser.displayName} className='rounded-full aspect-square'/>
           </div>
           <ul className={`${expandProfile ? 'h-max' : 'max-h-0 opacity-0 hidden'} z-20 transition-transform flex flex-col absolute translate-y-1/2 top-0 gap-1 right-0 

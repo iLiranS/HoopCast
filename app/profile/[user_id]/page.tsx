@@ -4,7 +4,7 @@ import {  doc, getDoc , collection , getDocs, QueryDocumentSnapshot} from 'fireb
 import { notFound } from 'next/navigation';
 import ProfilePage from '@/src/components/Profile/ProfilePage';
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 export const dynamic = 'force-static';
 
 export const metadata = {

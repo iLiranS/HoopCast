@@ -6,7 +6,7 @@ import { gamesData, vote } from '@/src/Models/gameData';
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const revalidate = 2000; // every 16mins  = 90 per day.
+export const revalidate = 960; // 960 = every 16mins  = 90 per day.
 
 const getUpdatedGame = async()=>{
   const currentDate = new Date();
@@ -161,14 +161,9 @@ const updateFireStoreMatches = async(games:gamesData[])=>{
 export default async function Home() {
 
 
-
-
-
-
   try {
     const games = await getUpdatedGame();
     const response = games.response;
-
     // const games = await getGames();
     // const gamesJSON = JSON.parse(games);
     // const response = gamesJSON.response;

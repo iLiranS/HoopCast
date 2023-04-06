@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import ProfilePage from '@/src/components/Profile/ProfilePage';
 
 export const dynamicParams = true;
+export const revalidate = 960;
 export const dynamic = 'force-static';
 
 export const metadata = {

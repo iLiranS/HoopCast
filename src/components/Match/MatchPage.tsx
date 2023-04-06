@@ -1,19 +1,22 @@
 'use client'
 import { convertUTCToLocalTime, gamesData, predictionsData } from '@/src/Models/gameData'
 import useAuthStore from '@/src/store/useAuthStore';
-import React, { useState , useMemo } from 'react'
+import React, { useState , useMemo , useEffect } from 'react'
 import MatchSide from './MatchSide';
 import Alert from '../Ui/Alert';
 import MatchComments from './MatchComments';
 import Link from 'next/link';
+import Spinner from '../Spinner/Spinner';
 
 
 
 const MatchPage:React.FC<{game:gamesData;predictionsData:predictionsData}> = ({game,predictionsData}) => {
-     const {date , points , scores , status , teams, comments , id} = game;
+     const {date , points , scores , status , teams , id} = game;
      const [didVote,setDidVote] = useState(false);
      const [showAlert, setShowAlert] = useState(false);
      const [alertMessage,setAlertMessage] = useState('');
+     const [comments,setComments] = useState([]);
+     const [isMessagesLoading,setIsMessagesLoading] = useState(true);
      const currentUser = useAuthStore((state)=>state.currentUser)
 
       const closeAlert = () => setShowAlert(false);
@@ -66,10 +69,32 @@ const MatchPage:React.FC<{game:gamesData;predictionsData:predictionsData}> = ({g
     },[predictionsData])
     
     
+  useEffect(()=>{
+    const loadMessages = async()=>{
+      try{
+
+        const response = await fetch(`/api/addcomment?id=${game.id}`);
+        if (!response.ok){
+          
+          if (response.status===404) throw new Error('no comments');
+          else throw new Error('failed fetching comments');
+        }
+        const data = await response.json();
+        setComments(data.comments);
+
+      }
+      catch(error){
+        console.log(error.message);
+      }
+      setIsMessagesLoading(false);
+
+    }
+    loadMessages();
+  },[game.id])    
 
 
   return (
-    <div className='h-full px-1 md:px-0 w-full max-w-[600px] mx-auto flex flex-col  relative pt-12 gap-2 pb-8'>
+    <div className='h-full px-1 md:px-0 w-full  max-w-[600px] mx-auto flex flex-col  relative pt-12 gap-2 pb-8'>
       <Link className='items-center p-1 dark:bg-primary bg-primary_dark bg-opacity-10 dark:bg-opacity-10 rounded-md w-fit  flex gap-1' href={'/'}> <p>Go Back</p></Link>
       <div className='dark:bg-primary p-4 rounded-md rounded-b-none
         bg-primary_dark text-primary dark:text-primary_dark'>
@@ -80,12 +105,12 @@ const MatchPage:React.FC<{game:gamesData;predictionsData:predictionsData}> = ({g
             <section className='flex flex-col items-center justify-center bg-primary bg-opacity-10 dark:bg-primary_dark h-fit my-auto rounded-md p-1 relative'>
               {game.status.long==='Scheduled' ? <p className='text-primary'>{convertUTCToLocalTime(game.date)}</p> : 
                <div className='flex items-center w-max'>
-                <p className={`${game.points.home > game.points.visitors ? 'text-green-400' : 'text-red-400'}  w-10 text-center dark:bg-opacity-50 rounded-md  font-bold`}>{game.points.home}</p>
+                <p className={`${game.points.home > game.points.visitors ? 'text-green-400' : 'text-red-400'} w-10 text-center dark:bg-opacity-50 rounded-md  font-bold`}>{game.points.home}</p>
                 <p className='font-extrabold text-primary'>-</p>
-                <p className={`${game.points.home > game.points.visitors ? 'text-red-400' : 'text-green-400'}  w-10 text-center dark:bg-opacity-50 rounded-md  font-bold`}>{game.points.visitors}</p>
+                <p className={`${game.points.home > game.points.visitors ? 'text-red-400' : 'text-green-400'} w-10 text-center dark:bg-opacity-50 rounded-md  font-bold`}>{game.points.visitors}</p>
               </div>
               }
-             <p className={`text-xs absolute -bottom-4  h-min  w-min self-center ${game.status.long==='In Play'? ' text-rose-500' : 'text-primary dark:text-primary_dark'}`}>{game.status.long}</p>
+             <p className={`text-xs absolute -bottom-4  h-min  w-min self-center ${game.status.long==='In Play'? ' text-rose-500' : 'text-primary dark:text-primary_dark'}`}>{game.status.long==='In Play' ? 'live' : game.status.long}</p>
              
             </section>
 
@@ -96,7 +121,7 @@ const MatchPage:React.FC<{game:gamesData;predictionsData:predictionsData}> = ({g
               </div>
 
                
-                <MatchComments matchId={id.toString()} comments={comments?? null}/>
+               <MatchComments isLoading={isMessagesLoading} matchId={id.toString()} comments={comments}/>
 
               
 

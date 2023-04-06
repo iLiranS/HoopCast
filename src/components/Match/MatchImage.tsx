@@ -8,7 +8,7 @@ const MatchImage:React.FC<{alt:string;src:string;className:any}> = ({alt,src,cla
   return (
     <section className={`${className} relative  `}>
      {isImageLoading && <div className='absolute h-full w-full bg-gray-700 animate-pulse rounded-full'></div>}
-    <Image onError={()=>{setIsImageLoading(false);}} onLoad={()=>{setIsImageLoading(false)}} fill  alt={alt} src={src}/>
+    <Image onError={()=>{setIsImageLoading(false);}} onLoad={()=>{setIsImageLoading(false)}} fill sizes='100% 100%'  alt={alt} src={src}/>
     </section>
 
   )

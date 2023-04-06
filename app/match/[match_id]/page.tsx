@@ -1,12 +1,11 @@
 import { db } from '@/src/firebase/base';
-import { collection, doc , getDocs , getDoc , QueryDocumentSnapshot , query, orderBy} from 'firebase/firestore';
+import { collection, doc , getDocs , getDoc , QueryDocumentSnapshot} from 'firebase/firestore';
 import MatchPage from '@/src/components/Match/MatchPage';
-import { gamesData, predictionsData , UserModel, vote } from '@/src/Models/gameData';
-import {headers} from 'next/headers';
+import { gamesData, predictionsData , vote } from '@/src/Models/gameData';
 
-export const dynamicParams = false;
+export const dynamicParams = true;
+export const revalidate = 60;
 export const dynamic = 'force-static';
-
 export const metadata = {
     title:'HoopCast - Match',
     description: 'Match page of HoopCast',
@@ -19,14 +18,7 @@ const getMatchData = async(id:string) =>{
         const matchDoc = await getDoc(matchRef);
         if (matchDoc.exists()){
             const matchData = matchDoc.data();
-            const commentRef= collection(matchRef,'comments');
-            const q = query(commentRef,orderBy('timestamp'));
-            const commentsQuerySnapshot = await getDocs(q);
-            const commentsData = commentsQuerySnapshot.docs.map((doc)=>doc.data());
-            if (commentsData){
-                return {...matchData,comments:commentsData};
-            }
-             return matchData; // also need to get comments collection.
+                return matchData            
         }
         else{
             return null;

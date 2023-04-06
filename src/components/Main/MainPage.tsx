@@ -51,7 +51,7 @@ const MainPage:React.FC<{games:gamesData[]}> = ({games}) => {
 
 
   return (
-    <ul className='relative flex flex-col  mx-auto gap-2 pt-12 items-center  pb-2'>
+    <ul className='relative flex flex-col w-full max-w-[500px]  px-2 md:px-0  mx-auto gap-2 pt-4 md:pt-12 items-center  pb-2'>
         <li className='font-semibold'>Today&apos;s Matches :</li>
         {mappedGames}
     </ul>

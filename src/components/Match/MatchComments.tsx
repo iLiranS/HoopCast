@@ -6,8 +6,9 @@ import SingleComment from './SingleComment'
 import { comment } from '@/src/Models/gameData'
 import useAuthStore from '@/src/store/useAuthStore'
 import Alert from '../Ui/Alert'
+import Spinner from '../Spinner/Spinner'
 
-const MatchComments:React.FC<{comments:comment[],matchId:string}> = ({comments,matchId}) => {
+const MatchComments:React.FC<{comments:comment[],matchId:string,isLoading:boolean}> = ({comments,matchId,isLoading}) => {
     const user = useAuthStore((state)=> state.currentUser);
     const [alertMessage,setAlertMessage] = useState(null);
     const [isCommentResultLoading,setIsCommmentResultLoading] = useState(false);
@@ -98,8 +99,8 @@ const MatchComments:React.FC<{comments:comment[],matchId:string}> = ({comments,m
     bg-primary_dark text-primary dark:text-primary_dark gap-3'>
 
       <li className='font-semibold list-none h-4'>Comments :</li>
-    <ul ref={listRef} className=' scroll-smooth flex flex-col gap-2 h-[400px] justify-start overflow-y-auto'>
-      {commentsMapped}
+    <ul ref={listRef} className=' scroll-smooth flex flex-col gap-2 h-[400px] justify-start overflow-y-auto relative'>
+      { isLoading ? <div className='grid absolute h-full w-full place-items-center'><Spinner/></div>  : commentsMapped}
     </ul>
 
     <form onSubmit={sendMessageHandler} className='h-10 rounded-md grid grid-cols-[auto,max-content] gap-2'>

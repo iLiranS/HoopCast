@@ -169,13 +169,13 @@ export default async function Home() {
 
 
   try {
-    const games = await getUpdatedGame();
-    console.log(games);
-    const response = games.response;
+    // const games = await getUpdatedGame();
+    // console.log(games);
+    // const response = games.response;
 
-    // const games = await getGames();
-    // const gamesJSON = JSON.parse(games);
-    // const response = gamesJSON.response;
+    const games = await getGames();
+    const gamesJSON = JSON.parse(games);
+    const response = gamesJSON.response;
 
     const mappedGames = response.map(game =>({
       id:game.id,

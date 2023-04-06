@@ -31,7 +31,7 @@ const SingleComment:React.FC<{comment:comment}> = ({comment}) => {
         const redirectToProfile = () => router.push(`/profile/${comment.user.id}`);
 
   return (
-<li className={`w-full relative p-2 gap-2  bg-primary dark:bg-primary_dark bg-opacity-10 dark:bg-opacity-10 rounded-md grid grid-cols-[max-content,auto,max-content]`} style={{ maxHeight: expand ? '400px' : '40px', transition: 'max-height 0.5s ease-in-out' }}>
+<li className={` animate-pageInParagraph w-full relative p-2 gap-2  bg-primary dark:bg-primary_dark bg-opacity-10 dark:bg-opacity-10 rounded-md grid grid-cols-[max-content,auto,max-content]`} style={{ maxHeight: expand ? '400px' : '40px', transition: 'max-height 0.5s ease-in-out' }}>
    
     <section onClick={redirectToProfile} className='flex max-h-full  cursor-pointer overflow-hidden h-8  items-center w-fit gap-1 bg-primary dark:bg-primary_dark bg-opacity-10 dark:bg-opacity-10  p-1 rounded-md'>
         <MatchImage className={'h-8 aspect-square overflow-hidden rounded-full'} src={sanitizedImage} alt={comment.user.name}/>

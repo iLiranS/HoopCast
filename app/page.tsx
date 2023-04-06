@@ -6,7 +6,7 @@ import { gamesData, vote } from '@/src/Models/gameData';
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const revalidate = 960; // every 16mins  = 90 per day.
+export const revalidate = 2000; // every 16mins  = 90 per day.
 
 const getUpdatedGame = async()=>{
   const currentDate = new Date();
@@ -167,7 +167,6 @@ export default async function Home() {
 
   try {
     const games = await getUpdatedGame();
-    console.log(games);
     const response = games.response;
 
     // const games = await getGames();
@@ -192,7 +191,6 @@ export default async function Home() {
       }
     }))
     // after updatePredictions I need to delete predictions of finished games.
-    console.log(mappedGames);
     const updatedFireBase = await updateFireStoreMatches(mappedGames);
     const updateFinishedGames = await updatePredictionsOfFinishedGames(mappedGames);
     if(!updatedFireBase || !updateFinishedGames) throw new Error('failed fetching');

@@ -61,7 +61,6 @@ const page =  async({params}:{params:{match_id:string}}) => {
     const matchData = await getMatchData(params.match_id);
     const gameData = matchData as gamesData;
     const predictionsData: predictionsData = await getPredictionsData(params.match_id);
-
     
   return (
         <MatchPage predictionsData={predictionsData} game={gameData}/>

@@ -8,7 +8,7 @@ import useAuthStore from '@/src/store/useAuthStore'
 import Alert from '../Ui/Alert'
 import Spinner from '../Spinner/Spinner'
 
-const MatchComments:React.FC<{comments:comment[],matchId:string,isLoading:boolean}> = ({comments,matchId,isLoading}) => {
+const MatchComments:React.FC<{comments:comment[],matchId:string}> = ({comments,matchId}) => {
     const user = useAuthStore((state)=> state.currentUser);
     const [alertMessage,setAlertMessage] = useState(null);
     const [isCommentResultLoading,setIsCommmentResultLoading] = useState(false);
@@ -26,7 +26,7 @@ const MatchComments:React.FC<{comments:comment[],matchId:string,isLoading:boolea
       // need  matchId, userId,userAvatar,userName, comment
       try{
         setIsCommmentResultLoading(true);
-        const response = await fetch('/api/addcomment', {
+        const response = await fetch('https://hoop-cast.vercel.app/api/addcomment', {
           method: 'POST',
           body: JSON.stringify({ matchId:matchId, userId: user.uid,userAvatar:user.photoURL,userName:user.displayName,comment:commentInput.value}),
           headers: {
@@ -100,13 +100,12 @@ const MatchComments:React.FC<{comments:comment[],matchId:string,isLoading:boolea
 
       <li className='font-semibold list-none h-4'>Comments :</li>
     <ul ref={listRef} className=' scroll-smooth flex flex-col gap-2 h-[400px] justify-start overflow-y-auto relative'>
-      { isLoading ? <div className='grid absolute h-full w-full place-items-center'><Spinner/></div>  : commentsMapped}
+       {commentsMapped}
     </ul>
 
-    <form onSubmit={sendMessageHandler} className='h-10 rounded-md grid grid-cols-[auto,max-content] gap-2'>
-    <section className='flex relative items-center bg-primary_dark dark:bg-primary  bg-opacity-20 dark:bg-opacity-20'>
-        <input  id='commentInput'  placeholder=''  className={`formInput peer ${commentInput.hasError ? 'border-red-400' : ' border-gray-400'} text-primary_dark`} type='text' value={commentInput.value} onChange={updateCommentInputHandler}/>
-        <label htmlFor="commentInput" className={` formInputLabel bg-inherit ${commentInput.value.length>0 && 'formInputLabel_stay'} rounded-md text-primary_dark`}>Comment</label>
+    <form onSubmit={sendMessageHandler} className='h-10  grid grid-cols-[auto,max-content] gap-2 border-t-[1px] border-primary dark:border-primary_dark'>
+    <section className='flex relative  items-center bg-primary_dark dark:bg-primary  bg-opacity-20 dark:bg-opacity-20'>
+        <input  id='commentInput'  placeholder='Comment'  className={`w-full bg-transparent text-primary dark:text-primary_dark outline-none ${commentInput.hasError ? 'border-red-400' : ' border-gray-400'}`} type='text' value={commentInput.value} onChange={updateCommentInputHandler}/>
         </section>
         <button className='w-max dark:hover:text-primary_btns hover:text-green-400'><AiOutlineSend className='text-xl'/></button>
     </form>

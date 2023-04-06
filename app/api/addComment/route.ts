@@ -1,5 +1,5 @@
 import { db } from '../../../src/firebase/base'
-import { getDoc,doc,updateDoc,arrayUnion } from 'firebase/firestore';
+import { doc,updateDoc,arrayUnion } from 'firebase/firestore';
 import { NextResponse } from 'next/server';
 
 
@@ -30,29 +30,6 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const matchId = searchParams.get('id');
-
-  try {
-    const matchDocRef = doc(db, 'matches', matchId.toString());
-    const matchDocSnapshot = await getDoc(matchDocRef);
-
-    if (!matchDocSnapshot.exists()) {
-      return NextResponse.json({ error: 'match not found' }, { status: 404 });
-    }
-
-    const comments = matchDocSnapshot.get('comments') || [];
-
-    console.log(comments);
-    return NextResponse.json({ comments }, { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error }, { status: 500 });
-  }
-}
-
-  
   
   
   

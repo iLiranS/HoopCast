@@ -10,12 +10,10 @@ import Link from 'next/link';
 
 
 const MatchPage:React.FC<{game:gamesData;predictionsData:predictionsData}> = ({game,predictionsData}) => {
-     const {date , points , scores , status , teams , id} = game;
+     const {date , points , scores , status , teams , comments , id} = game;
      const [didVote,setDidVote] = useState(false);
      const [showAlert, setShowAlert] = useState(false);
      const [alertMessage,setAlertMessage] = useState('');
-     const [comments,setComments] = useState([]);
-     const [isMessagesLoading,setIsMessagesLoading] = useState(true);
      const currentUser = useAuthStore((state)=>state.currentUser)
 
       const closeAlert = () => setShowAlert(false);
@@ -32,17 +30,19 @@ const MatchPage:React.FC<{game:gamesData;predictionsData:predictionsData}> = ({g
         return;
       }
       try{
-        const response = await fetch('/api/addprediction', {
+        const response = await fetch('https://hoop-cast.vercel.app/api/addprediction', {
           method: 'POST',
           body: JSON.stringify({ matchId, userId: currentUser.uid, team:side }),
           headers: {
           'Content-Type': 'application/json',
         },});
-        if (!response.ok){
-          console.log(response);
-          throw new Error('prediction post failed');
-        }
         const data = await response.json();
+        if (!response.ok){
+          if (response.status ===409){
+            throw new Error(data.response);
+          }
+          throw new Error( data.response ?? 'prediction post failed');
+        }
         if (data.response === 'User already voted for this match') {
           setDidVote(true);
           setShowAlert(true);
@@ -56,7 +56,7 @@ const MatchPage:React.FC<{game:gamesData;predictionsData:predictionsData}> = ({g
       }
       catch(error){
       setShowAlert(true);
-      setAlertMessage('error');
+      setAlertMessage(error.message);
       } 
     };
 
@@ -68,28 +68,7 @@ const MatchPage:React.FC<{game:gamesData;predictionsData:predictionsData}> = ({g
     },[predictionsData])
     
     
-  useEffect(()=>{
-    const loadMessages = async()=>{
-      try{
-
-        const response = await fetch(`/api/addcomment?id=${game.id}`);
-        if (!response.ok){
-          
-          if (response.status===404) throw new Error('no comments');
-          else throw new Error('failed fetching comments');
-        }
-        const data = await response.json();
-        setComments(data.comments);
-
-      }
-      catch(error){
-        console.log(error.message);
-      }
-      setIsMessagesLoading(false);
-
-    }
-    loadMessages();
-  },[game.id])    
+  
 
 
   return (
@@ -115,7 +94,7 @@ const MatchPage:React.FC<{game:gamesData;predictionsData:predictionsData}> = ({g
             <MatchSide votes={predictionsData? predictionsData.visitors :0} percent={percentages ? percentages.visitors : null} status={game.status.long} didVote={didVote} voteFunction={votePredict} matchId={game.id} side='visitors' team={teams.visitors} wins={scores.visitors.win} losses={scores.visitors.lose}/>
         </section>
       </div>
-        <MatchComments isLoading={isMessagesLoading} matchId={id.toString()} comments={comments}/>
+        <MatchComments  matchId={id.toString()} comments={comments}/>
         {showAlert && <Alert message={alertMessage} onClose={closeAlert}/>}
     </div>
   )

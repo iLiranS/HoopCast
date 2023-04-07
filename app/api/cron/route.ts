@@ -2,7 +2,7 @@ import {doc , getDoc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/src/firebase/base';
 import { vote } from '@/src/Models/gameData';
 
-export default async function handler(){
+export default async function handler(req,res){
     // Get yesterday date
     const today = new Date();
     const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
@@ -26,8 +26,8 @@ export default async function handler(){
     const resultsAndIdMapped = data.map(game=>({id:game.id,
         home:game.teams.home.name , visitors:game.teams.visitors.name,
         result:game.scores.home.points >game.scores.visitors.points ? 'home' : 'visitors' }));
-
-
+        console.log(resultsAndIdMapped);
+        let clearedPredictions = 0;
         for (const game of resultsAndIdMapped) {
             // get game ref inside predictions and userPredictions .
             const gameId = game.id.toString();
@@ -36,10 +36,12 @@ export default async function handler(){
             const predictionsSnapshot = await getDoc(predictionsRef);
             const userPredictions = predictionsSnapshot.data()?.votes as vote[] || [];
             // check if empty
-            if (userPredictions.length ===0) return true;
+            if (userPredictions.length ===0) { res.status(200).send('Done, ' + 'cleared ' +'0 predictions');
+            ; return;};
       
             // going through each prediction in Predictions.
             for (const vote of userPredictions) {
+                clearedPredictions+=1;
               const userRef = doc(db, "users", vote.id);
               const userDocSnapshot = await getDoc(userRef);
               const userData = userDocSnapshot.data();
@@ -72,8 +74,11 @@ export default async function handler(){
             // delete predictions of a match.
             await deleteDoc(predictionsMatchRef);
           }
+          res.status(200).send('Done, ' + 'cleared  ' + clearedPredictions + ' predictions');
+
   }
   catch(error){
     console.error(error);
+    res.status(500).send('Failed Clearing Predictions')
   }
 }

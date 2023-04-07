@@ -1,8 +1,9 @@
 import { Inter } from 'next/font/google'
 import MainPage from '@/src/components/Main/MainPage';
-import {doc , collection , getDocs , getDoc, setDoc, deleteDoc , updateDoc} from 'firebase/firestore'
+import {doc , collection , getDocs, setDoc, deleteDoc} from 'firebase/firestore'
 import { db } from '@/src/firebase/base';
-import { gamesData, vote } from '@/src/Models/gameData';
+import { gamesData } from '@/src/Models/gameData';
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,84 +34,6 @@ const getUpdatedGame = async()=>{
   return null;
  }
 }
-
-// for the dummy data.
-const { promisify } = require('util');
-const fs = require('fs');
-const readFileAsync = promisify(fs.readFile);
-
-// dummy games data.
-const getGames = async()=>{
-  try {
-    const data = await readFileAsync('dummydata.txt', 'utf8');
-    return data;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-// this function takes a list of games , checks if status finished , updates user predictions and delete prediction.
-const updatePredictionsOfFinishedGames = async (games: gamesData[]) => {
-  const finishedGames = games.filter(game => game.status.long==='Finished');
-  if (finishedGames.length<1) return true;
-  try {
-    for (const game of finishedGames) {
-      // get game ref inside predictions and userPredictions .
-      const gameId = game.id.toString();
-      const predictionsMatchRef = doc(db,'predictions',gameId);
-      const predictionsRef = doc(db, "predictions", gameId.toString());
-      const predictionsSnapshot = await getDoc(predictionsRef);
-      const userPredictions = predictionsSnapshot.data()?.votes as vote[] || [];
-      // check if empty
-      if (userPredictions.length ===0) return true;
-
-      // going through each prediction in Predictions.
-      for (const vote of userPredictions) {
-        const userRef = doc(db, "users", vote.id);
-        const userDocSnapshot = await getDoc(userRef);
-        const userData = userDocSnapshot.data();
-
-        // check if user already has predictions history
-        if (!userData.predictions) {
-          userData.predictions = { win: 0, lose: 0, history: [] };
-        }
-        // game data of the specific game
-        const gameData = {
-          home: game.teams.home.name,
-          visitors: game.teams.visitors.name,
-          result: game.points.home > game.points.visitors ? "home" : "visitors",
-        };
-        // get and upate prediction result
-        const prediction = vote.vote;
-        const isCorrectPrediction = prediction === gameData.result;
-        if (isCorrectPrediction)  userData.predictions.win += 1;
-         else userData.predictions.lose += 1;
-        //  update user predictions history.
-        userData.predictions.history.push({
-          home: gameData.home,
-          visitors: gameData.visitors,
-          predict: prediction,
-          result: gameData.result,
-        });
-        // set updated doc
-        await setDoc(userRef, userData);
-      }
-      // delete predictions of a match.
-      await deleteDoc(predictionsMatchRef);
-    }
-
-    return true;
-  } catch (error) {
-
-    console.error('error updating predictions',error);
-    return false;
-  }
-};
-
-
-
-
-
 
 
 

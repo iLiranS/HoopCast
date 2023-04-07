@@ -23,7 +23,7 @@ export default async function handler(req,res){
   try{
     const response = await fetch(`https://api-nba-v1.p.rapidapi.com/games?date=${validDate}`, options);
     const data = await response.json();
-    const resultsAndIdMapped = data.map(game=>({id:game.id,
+    const resultsAndIdMapped = data.response.map(game=>({id:game.id,
         home:game.teams.home.name , visitors:game.teams.visitors.name,
         result:game.scores.home.points >game.scores.visitors.points ? 'home' : 'visitors' }));
         console.log(resultsAndIdMapped);
@@ -36,9 +36,7 @@ export default async function handler(req,res){
             const predictionsSnapshot = await getDoc(predictionsRef);
             const userPredictions = predictionsSnapshot.data()?.votes as vote[] || [];
             // check if empty
-            if (userPredictions.length ===0) { res.status(200).send('Done, ' + 'cleared ' +'0 predictions');
-            ; return;};
-      
+            if (userPredictions.length ===0) continue;
             // going through each prediction in Predictions.
             for (const vote of userPredictions) {
                 clearedPredictions+=1;

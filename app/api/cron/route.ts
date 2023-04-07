@@ -1,8 +1,9 @@
 import {doc , getDoc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/src/firebase/base';
 import { vote } from '@/src/Models/gameData';
+import { NextResponse } from 'next/server';
 
-export default async function handler(req,res){
+export  async function GET(){
     // Get yesterday date
     const today = new Date();
     const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
@@ -72,11 +73,11 @@ export default async function handler(req,res){
             // delete predictions of a match.
             await deleteDoc(predictionsMatchRef);
           }
-          res.status(200).send('Done, ' + 'cleared  ' + clearedPredictions + ' predictions');
+          return NextResponse.json({response:`Done, cleared ${clearedPredictions} predictions`})
 
   }
   catch(error){
     console.error(error);
-    res.status(500).send('Failed Clearing Predictions')
+    return NextResponse.json({response:'Failed Clearing Predictions'});
   }
 }

@@ -35,9 +35,6 @@ const getUpdatedGame = async()=>{
  }
 }
 
-
-
-
 const updateFireStoreMatches = async(games:gamesData[])=>{
   try{
     const matchesRef = collection(db, "matches");
@@ -87,9 +84,6 @@ export default async function Home() {
   try {
     const games = await getUpdatedGame();
     const response = games.response;
-    // const games = await getGames();
-    // const gamesJSON = JSON.parse(games);
-    // const response = gamesJSON.response;
 
     const mappedGames = response.map(game =>({
       id:game.id,
@@ -108,7 +102,6 @@ export default async function Home() {
         visitors:game.scores.visitors.points
       }
     }))
-    // const updateFinishedGames = await updatePredictionsOfFinishedGames(mappedGames);
     const updatedFireBase = await updateFireStoreMatches(mappedGames);
     if(!updatedFireBase) throw new Error('failed fetching');
     return (

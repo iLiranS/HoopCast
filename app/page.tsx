@@ -185,10 +185,9 @@ export default async function Home() {
         visitors:game.scores.visitors.points
       }
     }))
-    // after updatePredictions I need to delete predictions of finished games.
+    // const updateFinishedGames = await updatePredictionsOfFinishedGames(mappedGames);
     const updatedFireBase = await updateFireStoreMatches(mappedGames);
-    const updateFinishedGames = await updatePredictionsOfFinishedGames(mappedGames);
-    if(!updatedFireBase || !updateFinishedGames) throw new Error('failed fetching');
+    if(!updatedFireBase) throw new Error('failed fetching');
     return (
       <>
         <MainPage games={mappedGames} />

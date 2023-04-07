@@ -14,5 +14,5 @@ There is also option to comment on each match and visit other's profiles to view
 
 ## Live
 
-[Click to visit](https://www.hoopcast.vercel.app)
+[Click to visit](https://hoop-cast.vercel.app/)
 

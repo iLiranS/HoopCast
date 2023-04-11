@@ -13,7 +13,7 @@ const loading = () => {
     <li className='bg-primary_dark dark:bg-primary bg-opacity-10 dark:bg-opacity-10 w-full h-14 rounded-md'></li>
     <li className='bg-primary_dark dark:bg-primary bg-opacity-10 dark:bg-opacity-10 w-full h-14 rounded-md'></li>
     <li className='bg-primary_dark dark:bg-primary bg-opacity-10 dark:bg-opacity-10 w-full h-14 rounded-md'></li>
- </ul>
+  </ul>
   )
 }
 

@@ -1,11 +1,9 @@
-import { Inter } from 'next/font/google'
 import MainPage from '@/src/components/Main/MainPage';
 import {doc , collection , getDocs, setDoc, deleteDoc} from 'firebase/firestore'
 import { db } from '@/src/firebase/base';
 import { gamesData } from '@/src/Models/gameData';
 
 
-const inter = Inter({ subsets: ['latin'] })
 
 export const revalidate = 960; // 960 = every 16mins  = 90 per day.
 
@@ -18,7 +16,8 @@ const getUpdatedGame = async()=>{
   const apiKey = process.env.NEXT_PUBLIC_NBA_API_KEY;
   const options = {
     method: 'GET',
-    headers: {
+    headers:
+     {
 		  'X-RapidAPI-Key': apiKey,
 		  'X-RapidAPI-Host': 'api-nba-v1.p.rapidapi.com'
 	  }
@@ -83,8 +82,10 @@ export default async function Home() {
 
   try {
     const games = await getUpdatedGame();
-    const response = games.response;
-
+    const response:any[] = games.response;
+    if (response.length ===0){
+      return <p className='text-center'>No Games today.</p>
+    }
     const mappedGames = response.map(game =>({
       id:game.id,
       date:game.date.start,

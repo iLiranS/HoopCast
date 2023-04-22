@@ -9,6 +9,7 @@ type gameResult={
   visitors:string;
   result:string;
 }
+let result = '';
 
 
 
@@ -20,21 +21,28 @@ const fetchYesterdayGames = async()=>{ // returns mapped games
   let month = (yesterday.getMonth() + 1).toString().padStart(2, '0');
   let day = yesterday.getDate().toString().padStart(2, '0');
   const validDate = year + '-' + month + '-' + day;
+  result += 'Date : ' + validDate + ' , ';
   // api config
   const apiKey = process.env.NEXT_PUBLIC_NBA_API_KEY;
   const options = {
     method: 'GET',
     headers: {
-	  'X-RapidAPI-Key': apiKey,
-		'X-RapidAPI-Host': 'api-nba-v1.p.rapidapi.com'
-	  }
+      'X-RapidAPI-Key': apiKey,
+      'X-RapidAPI-Host': 'api-nba-v1.p.rapidapi.com'
+    }
   }
-  const response = await fetch(`https://api-nba-v1.p.rapidapi.com/games?date=${validDate}`,{...options,next:{revalidate:21600}}, );
-  const data = await response.json();
-  const resultsMapped = data.response.map((game:any)=>({id:game.id,
-    home:game.teams.home.name , visitors:game.teams.visitors.name,
-    result:game.scores.home.points >game.scores.visitors.points ? 'home' : 'visitors' }));
+  try{
+    const response = await fetch(`https://api-nba-v1.p.rapidapi.com/games?date=${validDate}`,{...options,next:{revalidate:21600}}, );
+    const data = await response.json();
+    const resultsMapped = data.response.map((game:any)=>({id:game.id,
+      home:game.teams.home.name , visitors:game.teams.visitors.name,
+      result:game.scores.home.points >game.scores.visitors.points ? 'home' : 'visitors' }));
+    result+= 'first game home name : '+ resultsMapped[0]? resultsMapped[0].home : 'no games';
     return resultsMapped as gameResult[];
+  }
+  catch(error){
+    return error;
+  }
 }
 
 const updateUser = async(vote:vote,game:gameResult) =>{ // updates user in firebase
@@ -90,7 +98,8 @@ export  async function GET(){
             // delete predictions of a match.
             await deleteDoc(predictionsMatchRef);
           }
-          return NextResponse.json({response:`Done, cleared ${clearedPredictions} predictions`})
+          result += `Cleared ${clearedPredictions} Predictions.`;
+          return NextResponse.json({response:result})
   }
   catch(error){
     console.error(error);

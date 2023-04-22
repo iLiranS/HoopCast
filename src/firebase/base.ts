@@ -4,6 +4,9 @@ import { GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 
+
+
+
 const firebaseconfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     authDomain: "soccerwise-f2f76.firebaseapp.com",

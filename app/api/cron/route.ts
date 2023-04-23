@@ -32,7 +32,7 @@ const fetchYesterdayGames = async()=>{ // returns mapped games
     }
   }
   try{
-    const response = await fetch(`https://api-nba-v1.p.rapidapi.com/games?date=${validDate}`,{...options,next:{revalidate:21600}}, );
+    const response = await fetch(`https://api-nba-v1.p.rapidapi.com/games?date=${validDate}`,{...options,next:{revalidate:3600}}, );
     const data = await response.json();
     const resultsMapped = data.response.map((game:any)=>({id:game.id,
       home:game.teams.home.name , visitors:game.teams.visitors.name,
@@ -99,8 +99,8 @@ export  async function GET(){
             await deleteDoc(predictionsMatchRef);
           }
           result += `Cleared ${clearedPredictions} Predictions.`;
-          return NextResponse.json({response:result})
-  }
+          return NextResponse.json({ response: result }, { headers: { 'Cache-Control': 'no-cache' } });
+        }
   catch(error){
     console.error(error);
     return NextResponse.json({response:error});

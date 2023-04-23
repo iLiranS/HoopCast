@@ -16,7 +16,7 @@ function makeid(length:number) {
     return result;
   }
   
- const SignUpAvatar:React.FC<{updateAvatar:(avatar:string)=>void}> = ({updateAvatar}) => {
+const SignUpAvatar:React.FC<{updateAvatar:(avatar:string)=>void}> = ({updateAvatar}) => {
     const [avatar,setAvatar] = useState<null | string>(null);
     const [canReload,setCanReload] = useState(true);
 

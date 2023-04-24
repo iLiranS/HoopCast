@@ -10,13 +10,12 @@ type gameResult={
   result:string;
 }
 let result = '';
+export const revalidate = 3600;
 
 
-
-const fetchYesterdayGames = async()=>{ // returns mapped games
+const fetchYesterdayGames = async(date:Date)=>{ // returns mapped games
   // Get yesterday date and returns game Object with this format : [ {id,home,visitors,result} ]
-  const today = new Date();
-  const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+  const yesterday = new Date(date.getTime() - 24 * 60 * 60 * 1000);
   let year = yesterday.getFullYear();
   let month = (yesterday.getMonth() + 1).toString().padStart(2, '0');
   let day = yesterday.getDate().toString().padStart(2, '0');
@@ -32,12 +31,11 @@ const fetchYesterdayGames = async()=>{ // returns mapped games
     }
   }
   try{
-    const response = await fetch(`https://api-nba-v1.p.rapidapi.com/games?date=${validDate}`,{...options,next:{revalidate:3600}}, );
+    const response = await fetch(`https://api-nba-v1.p.rapidapi.com/games?date=${validDate}`,options);
     const data = await response.json();
     const resultsMapped = data.response.map((game:any)=>({id:game.id,
       home:game.teams.home.name , visitors:game.teams.visitors.name,
-      result:game.scores.home.points >game.scores.visitors.points ? 'home' : 'visitors' }));
-    result+= 'first game home name : '+ resultsMapped[0]? resultsMapped[0].home : 'no games';
+      result:game.scores.home.points > game.scores.visitors.points ? 'home' : 'visitors' }));
     return resultsMapped as gameResult[];
   }
   catch(error){
@@ -79,7 +77,8 @@ catch(error){
 export  async function GET(){
 
   try{
-        const results = await fetchYesterdayGames();
+        const today = new Date();
+        const results = await fetchYesterdayGames(today);
         let clearedPredictions = 0;
         for (const game of results) {
             // get game ref inside predictions and userPredictions .
@@ -98,7 +97,7 @@ export  async function GET(){
             // delete predictions of a match.
             await deleteDoc(predictionsMatchRef);
           }
-          result += `Cleared ${clearedPredictions} Predictions.`;
+          result += `, Cleared ${clearedPredictions} Predictions.`;
           return NextResponse.json({ response: result }, { headers: { 'Cache-Control': 'no-cache' } });
         }
   catch(error){

@@ -38,3 +38,27 @@ export function convertUTCToLocalTime(utcDateString) {
     const minutes = localDate.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
 }
+
+export type fullGameData={
+    id:number,
+    league:string,
+    season:number,
+    date:{start:string,end:any,duration:any},
+    stage:number,
+    status:{clock:any,halftime:boolean,short:number,long:string},
+    periods:{current:number,total:number,endOfPeriod:boolean},
+    arena:{name:string,city:string,state:string},
+    teams:{
+        visitors:{
+            id:number,name:string,nickname:string,code:string,logo:string
+        },
+        home:{
+            id:number,name:string,nickname:string,code:string,logo:string
+        }
+    },
+    scores:{
+        visitors:{win:number,lose:number,series:{win:number,lose:number},linescore:number[],points:number},
+        home:{win:number,lose:number,series:{win:number,lose:number},linescore:number[],points:number},
+    }
+
+}

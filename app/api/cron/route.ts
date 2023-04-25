@@ -1,6 +1,6 @@
 import {doc , getDoc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/src/firebase/base';
-import { vote } from '@/src/Models/gameData';
+import { fullGameData, vote } from '@/src/Models/gameData';
 import { NextResponse } from 'next/server';
 
 type gameResult={
@@ -33,10 +33,16 @@ const fetchYesterdayGames = async(date:Date)=>{ // returns mapped games
   try{
     const response = await fetch(`https://api-nba-v1.p.rapidapi.com/games?date=${validDate}`,options);
     const data = await response.json();
-    const resultsMapped = data.response.map((game:any)=>({id:game.id,
-      home:game.teams.home.name , visitors:game.teams.visitors.name,
-      result:game.scores.home.points > game.scores.visitors.points ? 'home' : 'visitors' }));
-    return resultsMapped as gameResult[];
+    const gamesList = data.response as fullGameData[];
+    const resultsMapped = gamesList.filter(game=> game.status.long==='Finished').map((game)=>(
+    {
+      id:game.id,
+      home:game.teams.home.name,
+      visitors:game.teams.visitors.name,
+      result:game.scores.home.points > game.scores.visitors.points ? 'home' : 'visitors'
+    }));
+
+    return resultsMapped;
   }
   catch(error){
     return error;
